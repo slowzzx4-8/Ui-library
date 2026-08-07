@@ -1,4 +1,4 @@
-local VexUI = loadstring(game:HttpGet("https://github.com/SSHRKs/VexUI/releases/latest/download/main.lua"))()
+local VexUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/Void_hub_UI.lua"))()
 local Window = VexUI:CreateWindow({
     Name = "Void Hub",
     Icon = "door-open",
