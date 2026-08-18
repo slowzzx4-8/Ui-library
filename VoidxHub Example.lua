@@ -1,272 +1,488 @@
 --[[
-  VoidxHub Example — ~200 functions
-  Tabs remember last selection · Dropdown Vex-style (empty) · Farm combos
+    Void Ui — Example / Test Script
+    Usa as funções disponíveis da biblioteca para validar a UI.
+    Substitua o loadstring pela sua URL ou cole o return da lib localmente.
 ]]
 
-local Library
-if isfile and isfile("VoidxHub.lua") then
-    Library = loadstring(readfile("VoidxHub.lua"))()
-else
-    Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/Void%20Ui%20Library.lua"))()
-end
+local VoidUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/Void%20Ui%20Library.lua"))()
+-- Se estiver testando local (Synapse/Script-Ware etc com readfile):
+-- local VoidUI = loadstring(readfile("Void Ui Library.lua"))()
 
-local Window = Library:CreateWindow({
-    Name = "VoidxHub",
-    Author = "By Slowzzx",
-    Icon = "house",
+-- ========== LOADING (opcional) ==========
+local Loading = VoidUI:LoadingScreen({
+    Title = "Void Ui",
+    Desc = "Carregando interface...",
+    Icon = "loader",
+})
+Loading:SetProgress(0.25)
+Loading:SetStatus("Preparando janela...")
+task.wait(0.3)
+Loading:SetProgress(0.7)
+Loading:SetStatus("Quase pronto...")
+task.wait(0.2)
+Loading:SetProgress(1)
+Loading:Close(0.15)
+
+-- ========== WINDOW ==========
+local Window = VoidUI:CreateWindow({
+    Name = "Void Ui",
+    Author = "By Test",
+    Icon = "layout-dashboard",
     Theme = "Dark",
-    Resizable = true,
-    Size = UDim2.fromOffset(520, 400),
+    Transparent = false,
     SideBarWidth = 160,
-    ToggleKey = Enum.KeyCode.LeftControl,
-    User = { Enabled = true, Anonymous = false },
+    Size = UDim2.new(0, 520, 0, 380),
+    ToggleKey = Enum.KeyCode.RightControl,
+    Resizable = true,
+    AutoScale = true,
+    User = {
+        Enabled = true,
+        Anonymous = false,
+    },
+    -- KeySystem = { ... } -- descomente se quiser testar key
 })
 
-local Main = Window:Tab({ Title = "Main", Icon = "house" })
-local Player = Window:Tab({ Title = "Player", Icon = "user" })
-local Combat = Window:Tab({ Title = "Combat", Icon = "swords" })
-local Visuals = Window:Tab({ Title = "Visuals", Icon = "eye" })
-local Farm = Window:Tab({ Title = "Farm", Icon = "sprout" })
-local Combos = Window:Tab({ Title = "Combos", Icon = "layers" })
-local Teleport = Window:Tab({ Title = "Teleport", Icon = "map-pin" })
-local Utilities = Window:Tab({ Title = "Utilities", Icon = "wrench" })
-local Config = Window:Tab({ Title = "Config", Icon = "save" })
-local Notify = Window:Tab({ Title = "Notify", Icon = "bell" })
-local Empty = Window:Tab({ Title = "Empty", Icon = "folder" })
-local Settings = Window:Tab({ Title = "Settings", Icon = "settings" })
+Window:EditOpenButton({
+    Title = "Open Void Ui",
+    Icon = "layout-dashboard",
+    Transparency = 0.2,
+    StrokeThickness = 1,
+    AutoRotation = true,
+    Speed = 12,
+    CornerRadius = UDim.new(0, 16),
+})
 
-Main:Section({ Title = "Hub" })
-Main:Paragraph({ Title = "VoidxHub", Desc = "Minimize keeps last tab · Dropdown = Vex UI · Resize outside" })
-Main:Button({ Title = "Ping", Callback = function() Window:Notify({ Title = "Pong", Content = "OK", Duration = 2 }) end })
-Main:Toggle({ Title = "Master Switch", Default = false, Callback = print })
-Main:Slider({ Title = "Global Speed", Min = 1, Max = 10, Default = 1, Callback = print })
-Main:Dropdown({ Title = "Profile", Option = { "Default", "PVP", "Farm", "Stealth" }, Callback = print })
-Main:Dropdown({ Title = "Flags", Multi = true, Option = { "Beta", "Debug", "VIP" }, Callback = print })
-Main:Input({ Title = "Note", Placeholder = "text...", Callback = print })
-Main:Keybind({ Title = "Panic Key", Default = "P", Callback = print })
-Main:Colorpicker({ Title = "Theme Accent", Default = Color3.fromRGB(99, 102, 241), Callback = print })
+Window:Tag({
+    Name = "v1.0 Test",
+    Color = Color3.fromRGB(80, 160, 255),
+})
 
-Player:Section({ Title = "Movement" })
-Player:Slider({ Title = "WalkSpeed", Min = 16, Max = 250, Default = 16, Callback = function(v) print("WalkSpeed", v) end })
-Player:Slider({ Title = "JumpPower", Min = 50, Max = 300, Default = 50, Callback = function(v) print("JumpPower", v) end })
-Player:Slider({ Title = "HipHeight", Min = 0, Max = 15, Default = 0, Callback = function(v) print("HipHeight", v) end })
-Player:Slider({ Title = "FOV", Min = 70, Max = 120, Default = 70, Callback = function(v) print("FOV", v) end })
-Player:Section({ Title = "Toggles" })
-Player:Toggle({ Title = "Inf Jump", Default = false, Callback = print })
-Player:Toggle({ Title = "Noclip", Default = false, Callback = print })
-Player:Toggle({ Title = "Fly", Default = false, Callback = print })
-Player:Toggle({ Title = "Speed Bypass", Default = false, Callback = print })
-Player:Toggle({ Title = "Anti AFK", Default = false, Callback = print })
-Player:Toggle({ Title = "God Mode", Default = false, Callback = print })
-Player:Toggle({ Title = "Invisible", Default = false, Callback = print })
-Player:Toggle({ Title = "No Fall Damage", Default = false, Callback = print })
-Player:Toggle({ Title = "Swim Speed", Default = false, Callback = print })
-Player:Toggle({ Title = "Climb Boost", Default = false, Callback = print })
-Player:Dropdown({ Title = "Move Mode", Option = { "Walk", "Run", "Fly", "Swim" }, Callback = print })
-Player:Keybind({ Title = "Fly Toggle", Default = "F", Callback = print })
+Window:SetWatermark("Void Ui • Test Mode")
+Window:ShowTooltip("Interface carregada!", 2)
 
-Combat:Section({ Title = "Aimbot" })
-Combat:Toggle({ Title = "Aimbot", Default = false, Callback = print })
-Combat:Toggle({ Title = "Silent Aim", Default = false, Callback = print })
-Combat:Toggle({ Title = "Triggerbot", Default = false, Callback = print })
-Combat:Toggle({ Title = "Prediction", Default = false, Callback = print })
-Combat:Toggle({ Title = "Team Check", Default = false, Callback = print })
-Combat:Toggle({ Title = "Wall Check", Default = false, Callback = print })
-Combat:Toggle({ Title = "Visible Check", Default = false, Callback = print })
-Combat:Toggle({ Title = "FOV Circle", Default = false, Callback = print })
-Combat:Toggle({ Title = "Sticky Aim", Default = false, Callback = print })
-Combat:Toggle({ Title = "Auto Shoot", Default = false, Callback = print })
-Combat:Slider({ Title = "FOV Size", Min = 10, Max = 360, Default = 90, Callback = print })
-Combat:Slider({ Title = "Smoothness", Min = 1, Max = 30, Default = 8, Callback = print })
-Combat:Dropdown({ Title = "Hit Part", Option = { "Head", "Torso", "HumanoidRootPart", "Random" }, Callback = print })
-Combat:Dropdown({ Title = "Priority", Multi = true, Option = { "Closest", "Lowest HP", "Highest HP", "Threat" }, Callback = print })
-Combat:Colorpicker({ Title = "FOV Color", Default = Color3.fromRGB(255, 60, 60), Callback = print })
-Combat:Section({ Title = "Hitbox" })
-Combat:Toggle({ Title = "Expand Hitbox", Default = false, Callback = print })
-Combat:Slider({ Title = "Hitbox Size", Min = 1, Max = 40, Default = 5, Callback = print })
+-- Topbar extras
+VoidUI:CreateTopbarButton({
+    Icon = "bell",
+    Order = 1,
+    Callback = function()
+        VoidUI:Notification({
+            Title = "Topbar",
+            Desc = "Botão do topbar clicado",
+            Icon = "bell",
+            Duration = 3,
+        })
+    end,
+})
 
-Visuals:Section({ Title = "ESP" })
-Visuals:Toggle({ Title = "ESP", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Box", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Names", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Health", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Distance", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Tracers", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Chams", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Highlight", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Skeleton", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Head Dot", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Weapon", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Team Color", Default = false, Callback = print })
-Visuals:Dropdown({ Title = "ESP Style", Option = { "Box", "Corner", "Chams", "Highlight" }, Callback = print })
-Visuals:Colorpicker({ Title = "ESP Color", Default = Color3.fromRGB(255,255,255), Callback = print })
-Visuals:Slider({ Title = "Max Distance", Min = 50, Max = 5000, Default = 1500, Callback = print })
-Visuals:Section({ Title = "World" })
-Visuals:Toggle({ Title = "Fullbright", Default = false, Callback = print })
-Visuals:Toggle({ Title = "No Fog", Default = false, Callback = print })
-Visuals:Toggle({ Title = "XRay", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Custom Ambient", Default = false, Callback = print })
-Visuals:Toggle({ Title = "Remove Shadows", Default = false, Callback = print })
-Visuals:Colorpicker({ Title = "Ambient", Default = Color3.fromRGB(140,140,140), Callback = print })
+VoidUI:CreateTopbarToggle({
+    Icon = "moon",
+    EnableIcon = "sun",
+    DisableIcon = "moon",
+    Order = 2,
+    Default = false,
+    Callback = function(v)
+        print("[TopbarToggle]", v)
+    end,
+})
 
-Farm:Section({ Title = "Core Farm" })
-Farm:Toggle({ Title = "Auto Farm", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Collect", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Sell", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Buy", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Quest", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Upgrade", Default = false, Callback = print })
-Farm:Toggle({ Title = "Auto Rebirth", Default = false, Callback = print })
-Farm:Toggle({ Title = "Kill Aura", Default = false, Callback = print })
-Farm:Toggle({ Title = "Loot Aura", Default = false, Callback = print })
-Farm:Toggle({ Title = "Chest Farm", Default = false, Callback = print })
-Farm:Slider({ Title = "Range", Min = 10, Max = 500, Default = 60, Callback = print })
-Farm:Slider({ Title = "Delay (ms)", Min = 0, Max = 3000, Default = 150, Callback = print })
-Farm:Dropdown({ Title = "Method", Option = { "Nearest", "Highest Value", "Safe Path", "Route" }, Callback = print })
-Farm:Input({ Title = "Target", Placeholder = "Mob / NPC name", Callback = print })
-Farm:Keybind({ Title = "Toggle Farm", Default = "T", Callback = print })
-Farm:Section({ Title = "Filters" })
-Farm:Dropdown({ Title = "Ignore List", Multi = true, Option = { "Boss", "Elite", "Pet", "Ally" }, Callback = print })
-Farm:Toggle({ Title = "Skip Low Value", Default = false, Callback = print })
-Farm:Toggle({ Title = "Safe Zone Return", Default = true, Callback = print })
+-- ========== TABS ==========
+local Home = Window:Tab({ Title = "Home", Icon = "home", Border = true })
+local Controls = Window:Tab({ Title = "Controls", Icon = "sliders-horizontal", Border = true })
+local Inputs = Window:Tab({ Title = "Inputs", Icon = "text-cursor-input", Border = true })
+local Extra = Window:Tab({ Title = "Extra", Icon = "sparkles", Border = true })
+local Settings = Window:Tab({ Title = "Settings", Icon = "settings", Border = true })
 
-Combos:Section({ Title = "Farm Combos" })
-Combos:Paragraph({ Title = "Ideas", Desc = "Enable a preset combo — toggles related farm features together" })
-Combos:Button({ Title = "Combo: AFK Coin", Callback = function()
-    Window:Notify({ Title = "Combo", Content = "AFK Coin: Auto Farm + Collect + Sell", Icon = "coins", Duration = 3 })
-    print("combo afk coin")
-end })
-Combos:Button({ Title = "Combo: Quest Rush", Callback = function()
-    Window:Notify({ Title = "Combo", Content = "Quest + Kill Aura + Auto Collect", Duration = 3 })
-end })
-Combos:Button({ Title = "Combo: Boss Hunt", Callback = function()
-    Window:Notify({ Title = "Combo", Content = "Boss route + Aura + Loot", Duration = 3 })
-end })
-Combos:Button({ Title = "Combo: Safe Farm", Callback = function()
-    Window:Notify({ Title = "Combo", Content = "Safe Path + Zone Return + Low risk", Duration = 3 })
-end })
-Combos:Dropdown({ Title = "Preset Pack", Option = { "AFK Coin", "Quest Rush", "Boss Hunt", "Safe Farm", "Rebirth Loop" }, Callback = print })
-Combos:Toggle({ Title = "Chain Combos", Default = false, Callback = print })
-Combos:Slider({ Title = "Combo Delay", Min = 1, Max = 60, Default = 5, Callback = print })
-Combos:Section({ Title = "Loadout" })
-Combos:Dropdown({ Title = "Weapon Pack", Multi = true, Option = { "Sword", "Gun", "Staff", "Pet" }, Callback = print })
-Combos:Input({ Title = "Custom Combo Name", Placeholder = "my-combo", Callback = print })
-Combos:Button({ Title = "Save Combo", Callback = function() print("save combo") end })
-Combos:Button({ Title = "Load Combo", Callback = function() print("load combo") end })
+-- Abre sempre na primeira aba ao executar
+Window:SelectTab(1)
 
-Teleport:Section({ Title = "Places" })
-Teleport:Button({ Title = "TP Spawn", Callback = function() Window:Notify({ Title = "TP", Content = "Spawn", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Shop", Callback = function() Window:Notify({ Title = "TP", Content = "Shop", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Arena", Callback = function() Window:Notify({ Title = "TP", Content = "Arena", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Safe Zone", Callback = function() Window:Notify({ Title = "TP", Content = "Safe Zone", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Boss", Callback = function() Window:Notify({ Title = "TP", Content = "Boss", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Quest Hub", Callback = function() Window:Notify({ Title = "TP", Content = "Quest Hub", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Bank", Callback = function() Window:Notify({ Title = "TP", Content = "Bank", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Dungeon", Callback = function() Window:Notify({ Title = "TP", Content = "Dungeon", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Event", Callback = function() Window:Notify({ Title = "TP", Content = "Event", Duration = 2 }) end })
-Teleport:Button({ Title = "TP Secret", Callback = function() Window:Notify({ Title = "TP", Content = "Secret", Duration = 2 }) end })
-Teleport:Dropdown({ Title = "Saved Spots", Option = { "A", "B", "C", "D", "E" }, Callback = print })
-Teleport:Input({ Title = "Coords", Placeholder = "x, y, z", Callback = print })
-Teleport:Button({ Title = "Save Position", Callback = function() print("save pos") end })
-Teleport:Button({ Title = "Load Position", Callback = function() print("load pos") end })
+-- ========== HOME ==========
+Home:Section({ Title = "Welcome", Icon = "hand" })
+Home:Paragraph({
+    Title = "Void Ui Test",
+    Desc = "Script de exemplo com os componentes principais. Minimize (botão −) e reabra: a aba selecionada deve ser mantida.",
+    Icon = "info",
+})
+Home:Devider()
+Home:Paragraph({
+    Title = "Paragraph colorido",
+    Desc = "Exemplo com cor custom",
+    Color = "Cyan",
+})
+Home:EmptyState({
+    Title = "Área vazia",
+    Desc = "Exemplo de EmptyState",
+    Icon = "inbox",
+})
+Home:Discord({
+    Title = "Discord",
+    Desc = "Entre no servidor",
+    URL = "https://discord.gg/exemplo",
+})
 
-Utilities:Section({ Title = "Server" })
-Utilities:Button({ Title = "Server Hop", Callback = function() print("Server Hop") end })
-Utilities:Button({ Title = "Rejoin", Callback = function() print("Rejoin") end })
-Utilities:Button({ Title = "Copy JobId", Callback = function() print("Copy JobId") end })
-Utilities:Button({ Title = "Copy Join Code", Callback = function() print("Copy Join Code") end })
-Utilities:Button({ Title = "Anti Kick", Callback = function() print("Anti Kick") end })
-Utilities:Button({ Title = "Anti AFK Loop", Callback = function() print("Anti AFK Loop") end })
-Utilities:Section({ Title = "Performance" })
-Utilities:Toggle({ Title = "FPS Boost", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Low Graphics", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Mute All", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Clear Debris", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Unload Map Parts", Default = false, Callback = print })
-Utilities:Slider({ Title = "FPS Cap", Min = 30, Max = 360, Default = 60, Callback = print })
-Utilities:Dropdown({ Title = "Quality", Option = { "Ultra", "High", "Medium", "Low", "Potato" }, Callback = print })
-Utilities:Section({ Title = "Tools" })
-Utilities:Toggle({ Title = "Streamer Mode", Default = false, Callback = print })
-Utilities:Keybind({ Title = "Hide UI", Default = "LeftControl", Callback = print })
-Utilities:Button({ Title = "Copy Discord", Callback = function() print("discord") end })
+-- ========== CONTROLS ==========
+Controls:Section({ Title = "Ações" })
+Controls:Button({
+    Title = "Botão simples",
+    Desc = "Clique para notificar",
+    Callback = function()
+        VoidUI:Notification({
+            Title = "Button",
+            Desc = "Callback OK",
+            Icon = "check",
+            Duration = 2,
+        })
+    end,
+})
 
-Config:Section({ Title = "Profiles" })
-Config:Input({ Title = "Profile Name", Placeholder = "main", Callback = print })
-Config:Dropdown({ Title = "Profiles", Option = { "main", "alt", "farm", "pvp" }, Callback = print })
-Config:Button({ Title = "Save Config", Callback = function() if Window.SaveConfig then Window:SaveConfig("VoidxHub") end Window:Notify({ Title = "Config", Content = "Saved", Duration = 2 }) end })
-Config:Button({ Title = "Load Config", Callback = function() if Window.LoadConfig then Window:LoadConfig("VoidxHub") end Window:Notify({ Title = "Config", Content = "Loaded", Duration = 2 }) end })
-Config:Button({ Title = "Reset Config", Callback = function() print("reset") end })
-Config:Toggle({ Title = "Auto Load", Default = true, Callback = print })
-Config:Toggle({ Title = "Auto Save", Default = false, Callback = print })
-Config:Section({ Title = "Export" })
-Config:Button({ Title = "Export JSON", Callback = function() print("export") end })
-Config:Button({ Title = "Import JSON", Callback = function() print("import") end })
+Controls:Button({
+    Title = "Dialog de confirmação",
+    Desc = "Abre UI:Dialog",
+    Callback = function()
+        VoidUI:Dialog({
+            Title = "Confirmar?",
+            Desc = "Isso é só um teste de dialog.",
+            Buttons = {
+                { Text = "Cancelar", Callback = function() end },
+                {
+                    Text = "OK",
+                    Callback = function()
+                        VoidUI:Notification({ Title = "Dialog", Desc = "Confirmado", Duration = 2 })
+                    end,
+                },
+            },
+        })
+    end,
+})
 
-Notify:Section({ Title = "Toasts" })
-Notify:Button({ Title = "Info", Callback = function() Window:Notify({ Title = "Info", Content = "Hello", Icon = "info", Duration = 3 }) end })
-Notify:Button({ Title = "Success", Callback = function() Window:Notify({ Title = "OK", Content = "Done", Icon = "check-circle", Duration = 3 }) end })
-Notify:Button({ Title = "Warn", Callback = function() Window:Notify({ Title = "Warn", Content = "Careful", Icon = "alert-triangle", Duration = 3 }) end })
-Notify:Button({ Title = "Error", Callback = function() Window:Notify({ Title = "Error", Content = "Failed", Icon = "x-circle", Duration = 3 }) end })
-Notify:Button({ Title = "Library Notify", Callback = function() Library:Notification({ Title = "Lib", Desc = "API", Icon = "bell", Duration = 3 }) end })
+Controls:Toggle({
+    Title = "Toggle",
+    Desc = "Liga / desliga",
+    Default = false,
+    Callback = function(v)
+        print("[Toggle]", v)
+    end,
+})
 
-    if not v then return end
-end })
-end })
-end })
-end })
+Controls:Slider({
+    Title = "Slider",
+    Desc = "Valor de 0 a 100",
+    Value = { Min = 0, Max = 100, Default = 40 },
+    Step = 1,
+    Callback = function(v)
+        print("[Slider]", v)
+    end,
+})
 
-Settings:Section({ Title = "User" })
-Settings:Toggle({ Title = "Show User", Default = true, Callback = function(v) if Window.UserEnabled then Window:UserEnabled(v) end end })
-Settings:Toggle({ Title = "Anonymous", Default = false, Callback = function(v) if Window.Anonymous then Window:Anonymous(v) end end })
-Settings:Section({ Title = "Theme" })
-local themes = {}
-for name in pairs(Window.Themes or {}) do table.insert(themes, name) end
-table.sort(themes)
-Settings:Dropdown({ Title = "Theme", Option = #themes > 0 and themes or { "Dark", "Light" }, Callback = function(v) if v then Window:SetTheme(v) end end })
-Settings:Toggle({ Title = "Transparent", Default = false, Callback = function(v) if Window.SetTransparency then Window:SetTransparency(v) end end })
-Settings:Toggle({ Title = "Acrylic", Default = false, Callback = function(v) if Window.ToggleAcrylic then Window:ToggleAcrylic(v) end end })
-Settings:Section({ Title = "Window" })
-Settings:Toggle({ Title = "Resizing", Default = true, Callback = function(v) if Window.SetResizable then Window:SetResizable(v) end end })
-Settings:Button({ Title = "To Center", Callback = function() if Window.ToCenter then Window:ToCenter() end end })
-Settings:Button({ Title = "Minimize", Callback = function() if Window.Minimize then Window:Minimize() end end })
-Settings:Button({ Title = "Fullscreen", Callback = function() if Window.ToggleFullscreen then Window:ToggleFullscreen() end end })
-Settings:Button({ Title = "Destroy", Callback = function() Window:Destroy() end })
+Controls:Stepper({
+    Title = "Stepper",
+    Desc = "Incremento com + / −",
+    Value = 5,
+    Min = 0,
+    Max = 20,
+    Step = 1,
+    Callback = function(v)
+        print("[Stepper]", v)
+    end,
+})
 
-Utilities:Section({ Title = "Extra Utilities" })
-Utilities:Toggle({ Title = "Util Flag 1", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 2", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 3", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 4", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 5", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 6", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 7", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 8", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 9", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 10", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 11", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 12", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 13", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 14", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 15", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 16", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 17", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 18", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 19", Default = false, Callback = print })
-Utilities:Toggle({ Title = "Util Flag 20", Default = false, Callback = print })
-Utilities:Button({ Title = "Util Action 1", Callback = function() print("util 1") end })
-Utilities:Button({ Title = "Util Action 2", Callback = function() print("util 2") end })
-Utilities:Button({ Title = "Util Action 3", Callback = function() print("util 3") end })
-Utilities:Button({ Title = "Util Action 4", Callback = function() print("util 4") end })
-Utilities:Button({ Title = "Util Action 5", Callback = function() print("util 5") end })
-Utilities:Button({ Title = "Util Action 6", Callback = function() print("util 6") end })
-Utilities:Button({ Title = "Util Action 7", Callback = function() print("util 7") end })
-Utilities:Button({ Title = "Util Action 8", Callback = function() print("util 8") end })
-Utilities:Button({ Title = "Util Action 9", Callback = function() print("util 9") end })
-Utilities:Button({ Title = "Util Action 10", Callback = function() print("util 10") end })
-Farm:Slider({ Title = "Farm Extra 1", Min = 0, Max = 100, Default = 5, Callback = print })
-Farm:Slider({ Title = "Farm Extra 2", Min = 0, Max = 100, Default = 10, Callback = print })
-Farm:Slider({ Title = "Farm Extra 3", Min = 0, Max = 100, Default = 15, Callback = print })
-Farm:Slider({ Title = "Farm Extra 4", Min = 0, Max = 100, Default = 20, Callback = print })
-Farm:Slider({ Title = "Farm Extra 5", Min = 0, Max = 100, Default = 25, Callback = print })
+Controls:ProgressBar({
+    Title = "Progress",
+    Value = 0.45,
+})
 
-print("[VoidxHub] example loaded — 210 UI elements")
+Controls:Checkbox({
+    Title = "Checkbox",
+    Desc = "Marcar opção",
+    Default = true,
+    Callback = function(v)
+        print("[Checkbox]", v)
+    end,
+})
+
+Controls:Radio({
+    Title = "Radio",
+    Options = { "Opção A", "Opção B", "Opção C" },
+    Value = "Opção A",
+    Callback = function(v)
+        print("[Radio]", v)
+    end,
+})
+
+Controls:SegmentedControl({
+    Title = "Segmented",
+    Options = { "Day", "Week", "Month" },
+    Value = "Day",
+    Callback = function(v)
+        print("[Segmented]", v)
+    end,
+})
+
+Controls:ChipList({
+    Title = "Chips",
+    Options = { "FPS", "ESP", "Aim", "Speed" },
+    Multi = true,
+    Value = { "ESP" },
+    Callback = function(v)
+        print("[Chips]", v)
+    end,
+})
+
+-- ========== INPUTS ==========
+Inputs:Section({ Title = "Campos" })
+Inputs:Input({
+    Title = "Input",
+    Desc = "Texto livre",
+    Placeholder = "Digite algo...",
+    Callback = function(text)
+        print("[Input]", text)
+    end,
+})
+
+Inputs:Input({
+    Title = "Input com limite",
+    MaxSymbols = 12,
+    Desc = "Máx. 12 caracteres",
+    Callback = function(text)
+        print("[InputLimit]", text)
+    end,
+})
+
+Inputs:Keybind({
+    Title = "Keybind",
+    Desc = "Pressione uma tecla",
+    Callback = function(key)
+        print("[Keybind]", key)
+    end,
+})
+
+Inputs:Dropdown({
+    Title = "Dropdown",
+    Desc = "Seleção única",
+    Multi = false,
+    Option = { "Alpha", "Beta", "Gamma", "Delta", "Epsilon" },
+    Value = "Alpha",
+    Callback = function(v)
+        print("[Dropdown]", v)
+    end,
+})
+
+Inputs:Dropdown({
+    Title = "Multi Dropdown",
+    Desc = "Várias opções",
+    Multi = true,
+    Option = { "Red", "Green", "Blue", "Yellow", "Purple" },
+    Value = { "Red" },
+    Callback = function(v)
+        print("[MultiDropdown]", typeof(v) == "table" and table.concat(v, ", ") or v)
+    end,
+})
+
+Inputs:Colorpicker({
+    Title = "Colorpicker",
+    Desc = "Escolha uma cor",
+    Default = Color3.fromRGB(80, 160, 255),
+    Callback = function(c)
+        print("[Color]", c)
+    end,
+})
+
+-- ========== EXTRA ==========
+Extra:Section({ Title = "Componentes extras" })
+Extra:Badge({ Title = "Badge", Text = "NEW" })
+Extra:Label({ Title = "Label simples", Text = "Texto de apoio" })
+Extra:KeyValue({
+    Title = "Key / Value",
+    Items = {
+        { Key = "Status", Value = "Online" },
+        { Key = "Ping", Value = "32ms" },
+        { Key = "FPS", Value = "60" },
+    },
+})
+
+Extra:Code({
+    Title = "Code (view)",
+    Code = [[local msg = "Hello Void Ui"
+print(msg)]],
+    Height = 120,
+    Editable = false,
+})
+
+Extra:Code({
+    Title = "Code (editor)",
+    Code = "-- edite aqui\nprint(123)",
+    Height = 100,
+    Editable = true,
+})
+
+Extra:Accordion({
+    Title = "Accordion",
+    Content = "Conteúdo expansível do accordion. Clique no título para abrir/fechar.",
+    Open = false,
+    Callback = function(open)
+        print("[Accordion]", open)
+    end,
+})
+
+Extra:Timeline({
+    Title = "Timeline",
+    Steps = { "Init", "Load", "Ready", "Done" },
+    Index = 2,
+})
+
+Extra:Path2D({
+    Title = "Chart",
+    Values = { 0.2, 0.55, 0.35, 0.8, 0.6, 0.9 },
+})
+
+Extra:PopupButton({
+    Title = "Abrir Popup",
+    PopupTitle = "Popup",
+    PopupContent = "Conteúdo do popup de teste.",
+    Callback = function()
+        print("[Popup] OK")
+    end,
+})
+
+Extra:Space(8)
+Extra:Section({ Title = "Grupo (lado a lado)" })
+local grid = Extra:Group({})
+grid:Toggle({ Title = "Aimbot", Default = false, Callback = function(v) print(v) end })
+grid:Toggle({ Title = "ESP", Default = true, Callback = function(v) print(v) end })
+
+-- ========== SETTINGS ==========
+Settings:Section({ Title = "Tema & Janela" })
+
+local themeNames = {}
+for name in pairs(Window.Themes or {}) do
+    table.insert(themeNames, name)
+end
+table.sort(themeNames)
+
+Settings:Dropdown({
+    Title = "Theme",
+    Option = #themeNames > 0 and themeNames or { "Dark", "Light", "Pink", "Blue", "Purple", "Neon" },
+    Value = Window:GetTheme() or "Dark",
+    Callback = function(name)
+        Window:SetTheme(name)
+        VoidUI:Notification({ Title = "Theme", Desc = tostring(name), Duration = 2 })
+    end,
+})
+
+Settings:Toggle({
+    Title = "Transparent",
+    Default = false,
+    Callback = function(v)
+        Window:SetTransparency(v)
+    end,
+})
+
+Settings:Toggle({
+    Title = "Acrylic",
+    Default = false,
+    Callback = function(v)
+        Window:ToggleAcrylic(v)
+    end,
+})
+
+Settings:Toggle({
+    Title = "Resizable",
+    Default = true,
+    Callback = function(v)
+        Window:SetResizable(v)
+    end,
+})
+
+Settings:Toggle({
+    Title = "User panel",
+    Default = true,
+    Callback = function(v)
+        Window:UserEnabled(v)
+    end,
+})
+
+Settings:Toggle({
+    Title = "Anonymous",
+    Default = false,
+    Callback = function(v)
+        Window:Anonymous(v)
+    end,
+})
+
+Settings:Keybind({
+    Title = "Toggle Key",
+    Callback = function(key)
+        local code = Enum.KeyCode[key]
+        if code then
+            Window:SetToggleKey(code)
+            VoidUI:Notification({ Title = "Toggle Key", Desc = tostring(key), Duration = 2 })
+        end
+    end,
+})
+
+Settings:Section({ Title = "Utilidades" })
+Settings:Button({
+    Title = "To Center",
+    Callback = function()
+        Window:ToCenter()
+    end,
+})
+
+Settings:Button({
+    Title = "Fullscreen",
+    Callback = function()
+        Window:ToggleFullscreen()
+    end,
+})
+
+Settings:Button({
+    Title = "Lock All Elements",
+    Callback = function()
+        Window:LockAll()
+    end,
+})
+
+Settings:Button({
+    Title = "Unlock All Elements",
+    Callback = function()
+        Window:UnlockAll()
+    end,
+})
+
+Settings:Button({
+    Title = "Save Config",
+    Callback = function()
+        Window:SetConfig("demo", true)
+        Window:SaveConfig("VoidUiTest")
+    end,
+})
+
+Settings:Button({
+    Title = "Load Config",
+    Callback = function()
+        Window:LoadConfig("VoidUiTest")
+    end,
+})
+
+Settings:Dropdown({
+    Title = "Language",
+    Option = { "English", "Português", "Español", "Français", "Deutsch" },
+    Value = "Português",
+    Callback = function(lang)
+        Window:SetLanguage(lang)
+    end,
+})
+
+Settings:Section({ Title = "Perigo" })
+Settings:Button({
+    Title = "Destroy UI",
+    Desc = "Fecha e remove a interface",
+    Callback = function()
+        Window:Destroy()
+    end,
+})
+
+Window:OnDestroy(function()
+    print("[Void Ui] Destroyed")
+end)
+
+print("[Void Ui] Example loaded — use RightControl para abrir/fechar")
