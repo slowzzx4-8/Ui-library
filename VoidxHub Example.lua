@@ -7,7 +7,7 @@ local Library
 if isfile and isfile("VoidxHub.lua") then
     Library = loadstring(readfile("VoidxHub.lua"))()
 else
-    Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/VoidxHub.lua"))()
+    Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/Void%20Ui%20Library.lua"))()
 end
 
 local Window = Library:CreateWindow({
