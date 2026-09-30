@@ -5,7 +5,7 @@
 ]]
 
 -- ── Load library (local or HTTPS) ──
-local Rubi = loadstring(game:HttpGet("YOUR_HTTPS_LINK_TO_RubiHub.lua"))()
+local Rubi = loadstring(game:HttpGet("https://raw.githubusercontent.com/slowzzx4-8/Ui-library/refs/heads/main/RubiHub.lua"))()
 -- Or if in the same environment:
 -- local Rubi = require(path.to.RubiHub)  -- or loadfile
 
